@@ -1,6 +1,5 @@
 <p align="center">
   <img src="github/opengladlogo.png" alt="openGlad Logo" width="250" />
-  <h1 align="center">openGlad</h1>
   <p align="center"><strong>The Loss-Prevention Friction Engine for Founders</strong></p>
   <p align="center">
     An AI-powered MCP server that stops you from building things nobody wants using clinical analytics, behavioral pattern scanning, and real-time market intelligence.
@@ -14,9 +13,7 @@
 </p>
 
 <p align="center">
-  <video src="github/openGladDemo.mov" controls="controls" style="max-width: 100%;">
-    Your browser does not support the video tag.
-  </video>
+  <img src="github/openGladDemo.gif" alt="openGlad Demo" style="max-width: 100%;" />
 </p>
 
 ---
