@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Environment & Secrets
+.env
+.env.*
+.dev.vars
+mistral-api
+mistral-key
+
+# Build output
+dist/
+.wrangler/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Lock files (optional — remove this line if you want to track lock files)
+# package-lock.json
+
+# Python (legacy)
+__pycache__/
+*.pyc
+.venv/
