@@ -1,8 +1,8 @@
 <p align="center">
   <h1 align="center">🧠 openGlad</h1>
-  <p align="center"><strong>The Nervous System for Your Startup</strong></p>
+  <p align="center"><strong>The Loss-Prevention Friction Engine for Founders</strong></p>
   <p align="center">
-    An AI-powered MCP server that diagnoses your startup's health using clinical analytics and real-time Reddit market intelligence.
+    An AI-powered MCP server that stops you from building things nobody wants using clinical analytics, behavioral pattern scanning, and real-time market intelligence.
   </p>
   <p align="center">
     <a href="#tools">Tools</a> •
@@ -16,14 +16,14 @@
 
 ## What is openGlad?
 
-openGlad is a **Model Context Protocol (MCP) server** that acts as the diagnostic nervous system for startups. It provides AI agents (Claude, Gemini, ChatGPT, etc.) with specialized tools to:
+openGlad is a **Model Context Protocol (MCP) server** that acts as the ultimate friction engine for startups. It provides AI agents (Claude, Gemini, ChatGPT, etc.) with specialized tools to enforce loss-prevention *before* you write a single line of code:
 
-- 🔍 **Scan Reddit trends** across 11 entrepreneurship subreddits using Mistral AI's web search
-- 📊 **Analyze startup metrics** — execution stability, revenue health, burnout risk, distribution discipline
-- 🩺 **Generate clinical diagnoses** — objective, data-driven assessments with no fluff or motivational language
-- 🆚 **Compare ideas against market trends** — popularity, uniqueness, competitive landscape, timing
+- 🛑 **Loss-Prevention Pipeline** — Runs behavioral pattern scans, 3-scenario failure predictions, and locks building until monetization is confirmed.
+- 🔍 **Market Reality Check** — Analyzes real-time Reddit trends across 11 entrepreneurship subreddits to detect overcrowding and entry risks.
+- 📊 **Startup Diagnostics** — Evaluates execution stability, revenue health, burnout risk, and distribution discipline.
+- 🩺 **Clinical Triage** — Objective, data-driven assessments with zero motivational fluff.
 
-> Think of it as a **full-body health scan for your startup** — powered by AI, fed by real market data.
+> Think of it as an **anti-delusion engine for your startup** — designed to tell you 'no' before you waste months building the wrong thing.
 
 ## Architecture
 
@@ -31,12 +31,12 @@ openGlad is a **Model Context Protocol (MCP) server** that acts as the diagnosti
 ┌──────────────┐         ┌───────────────────────┐         ┌──────────────┐
 │   AI Client  │  MCP    │   openGlad Worker     │  API    │  Mistral AI  │
 │  (Claude,    │◄──────►│   (Cloudflare Edge)   │◄──────►│  (Agents +   │
-│   Gemini)    │         │                       │         │  Web Search) │
+│   Gemini)    │         │      Version 4.0      │         │  Web Search) │
 └──────────────┘         └───────────────────────┘         └──────┬───────┘
                                                                   │
                                                            ┌──────▼───────┐
                                                            │    Reddit    │
-                                                           │  11 Subs    │
+                                                           │  11 Subs     │
                                                            └──────────────┘
 ```
 
@@ -44,16 +44,25 @@ openGlad is a **Model Context Protocol (MCP) server** that acts as the diagnosti
 - **Runtime**: Cloudflare Workers (edge-deployed, globally distributed)
 - **Protocol**: MCP (Model Context Protocol) via Streamable HTTP
 - **AI Engine**: Mistral AI Agents API with built-in web search
-- **Language**: TypeScript
+- **Language**: TypeScript (Modular Architecture)
 
 ## Tools
+
+### 🚧 Friction Engine (Loss Prevention)
+
+| Tool | Description |
+|------|-------------|
+| `run_the_bet` | Mega-pipeline combining Pattern Scan, Loss Simulation, and the Revenue Gate using Mistral AI. |
+| `pattern_scan` | Detects behavioral risk patterns (e.g., building-in-isolation, feature-creep). |
+| `loss_simulation` | Generates 3-scenario failure predictions (best, base, worst cases) via Mistral. |
+| `revenue_gate` | Locks building and asserts absolute friction until clear monetization strategy/evidence is confirmed. |
 
 ### 🔍 Market Intelligence (Mistral-powered)
 
 | Tool | Description |
 |------|-------------|
-| `analyze_market_trends` | Compares your startup idea against live Reddit trends. Returns: trend popularity score, timing assessment, uniqueness rating, competitive landscape, strengths/weaknesses, and strategic recommendations. |
-| `scan_reddit_trends` | Scans Reddit communities for current trends on any topic. Returns: trend overview, market sentiment, emerging opportunities, red flags, and key players. |
+| `analyze_market_trends` | Overcrowding & entry risk filter. Compares your startup idea against live Reddit trends using Mistral AI web search. |
+| `scan_reddit_trends` | Scans Reddit communities to provide general warnings, market sentiment, and emerging opportunities. |
 
 **Data Sources** — 11 subreddits scanned in real-time:
 
@@ -63,19 +72,19 @@ openGlad is a **Model Context Protocol (MCP) server** that acts as the diagnosti
 
 | Tool | Description |
 |------|-------------|
-| `analyze_startup` | General-purpose startup/idea analyzer. Accepts free-form text or structured JSON. Routes to the appropriate diagnostic tool automatically. |
-| `analyze_execution_stability` | Assesses development velocity, commit cadence, deployment reliability, and technical debt. |
-| `analyze_revenue_health` | Evaluates MRR/ARR trajectory, churn dynamics, unit economics (CAC/LTV), and runway. |
-| `analyze_burnout_risk` | Detects burnout signals from work patterns, cognitive load, focus entropy, and recovery adequacy. |
-| `analyze_distribution_discipline` | Measures marketing output consistency, channel diversification, funnel efficiency, and growth trajectory. |
-| `generate_full_diagnosis` | Comprehensive full-body scan across all four diagnostic dimensions with overall health score. |
+| `analyze_startup` | Triage router. Runs Friction Engine for ideas, and Diagnostics for metrics. |
+| `analyze_execution_stability` | Assesses development velocity, engineering risks, and technical debt. |
+| `analyze_revenue_health` | Evaluates MRR/ARR trajectory, financial risks, churn, and unit economics. |
+| `analyze_burnout_risk` | Detects burnout signals from work patterns, cognitive load, and focus entropy. |
+| `analyze_distribution_discipline` | Measures marketing risks, output consistency, and funnel efficiency. |
+| `generate_full_diagnosis` | Comprehensive system scan across all diagnostic dimensions. |
 
 ### 💬 MCP Prompts
 
 | Prompt | Description |
 |--------|-------------|
-| `analyze-startup` | Guided startup analysis flow — helps the AI client determine which tools to use. |
-| `trend-check` | Quick Reddit trend comparison — provide your idea and get an instant market analysis. |
+| `run-the-bet` | Executes the complete loss-prevention pipeline for a new idea. |
+| `analyze-startup` | Guided startup analysis flow — triage and routing for incoming startup ideas or metrics. |
 
 ## Quickstart
 
@@ -114,11 +123,11 @@ npx @modelcontextprotocol/inspector@latest
 Once connected, try these with your AI client:
 
 ```
-"Analyze my startup idea: an AI-powered tool that generates investor pitch decks from a one-page brief"
+"Run the bet on my startup idea: an AI-powered tool that generates investor pitch decks from a one-page brief"
 ```
 
 ```
-"What's trending in the SaaS space on Reddit right now?"
+"Can you check if my idea for a daily planner app is going to fail?"
 ```
 
 ```
@@ -150,13 +159,18 @@ npx wrangler deploy
 npx wrangler secret put MISTRAL_API_KEY
 ```
 
-### Project Structure
+### Project Structure (v4.0.0 Modular)
 
 ```
 openGlad/
 └── worker-openglad/          # Cloudflare Worker project
     ├── src/
-    │   └── index.ts           # MCP server — all tools, prompts, and Mistral integration
+    │   ├── config/            # Environment & constants
+    │   ├── prompts/           # LLM system prompts & templates
+    │   ├── services/          # Mistral & external APIs
+    │   ├── tools/             # MCP Tool definitions & handlers
+    │   ├── utils/             # Helper functions
+    │   └── index.ts           # Server entry point & tool registration
     ├── wrangler.jsonc          # Cloudflare Worker configuration
     ├── package.json
     └── tsconfig.json
@@ -164,22 +178,14 @@ openGlad/
 
 ## How It Works
 
-### Trend Analysis Flow
+### Friction Engine Flow (Loss-Prevention)
 
-1. **User asks** → *"Analyze my idea for an AI resume builder"*
-2. **AI client** → Calls `analyze_market_trends` with the idea description
-3. **openGlad Worker** → Sends request to Mistral Agents API with `web_search` enabled
-4. **Mistral Agent** → Searches Reddit subreddits for related discussions, trends, and competitors
-5. **Mistral Agent** → Analyzes findings and produces a detailed narrative report
-6. **User receives** → Comprehensive trend analysis with scores, competitive landscape, and actionable recommendations
-
-### Diagnostic Analysis Flow
-
-1. **User provides** → Startup metrics (revenue, team activity, engineering data, marketing stats)
-2. **AI client** → Calls the appropriate diagnostic tool(s)
-3. **openGlad Worker** → Returns a clinical diagnostic prompt with the user's data embedded
-4. **AI client** → Uses the diagnostic framework to produce a detailed, analytically rigorous assessment
-5. **User receives** → Clinical report with scores, findings, and specific recommendations
+1. **User asks** → *"I want to build an AI resume builder"*
+2. **AI client** → Calls `run_the_bet` or `analyze_startup`
+3. **openGlad Worker** → Runs `pattern_scan` to identify behavioral risks and queries Mistral AI for `loss_simulation`.
+4. **Mistral Agent** → Maps out why the idea will likely fail and searches Reddit to assess true market conditions.
+5. **Revenue Gate** → Blocks positive validation until a sustainable monetization path is proven.
+6. **User receives** → A brutal truth check: what their blind spots are, what their failure modes look like, and whether they are allowed to proceed to building.
 
 ## Built With
 
