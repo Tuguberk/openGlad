@@ -20,7 +20,7 @@
 
 ## What is openGlad?
 
-openGlad is a **Model Context Protocol (MCP) server** that acts as the ultimate friction engine for startups. It provides AI agents (Claude, Gemini, ChatGPT, etc.) with specialized tools to enforce loss-prevention *before* you write a single line of code:
+openGlad is a **Model Context Protocol (MCP) server** that acts as the ultimate friction engine for startups. It provides AI agents (Mistral's Le Chat, Claude, etc.) with specialized tools to enforce loss-prevention *before* you write a single line of code. Through MCP, you can seamlessly connect openGlad directly to **Mistral's Le Chat** natively:
 
 - 🛑 **Loss-Prevention Pipeline** — Runs behavioral pattern scans, 3-scenario failure predictions, and locks building until monetization is confirmed.
 - 🔍 **Market Reality Check** — Analyzes real-time Reddit trends across 11 entrepreneurship subreddits to detect overcrowding and entry risks.
@@ -34,8 +34,8 @@ openGlad is a **Model Context Protocol (MCP) server** that acts as the ultimate 
 ```
 ┌──────────────┐         ┌───────────────────────┐         ┌──────────────┐
 │   AI Client  │  MCP    │   openGlad Worker     │  API    │  Mistral AI  │
-│  (Claude,    │◄──────►│   (Cloudflare Edge)   │◄──────►│  (Agents +   │
-│   Gemini)    │         │      Version 4.0      │         │  Web Search) │
+│  (Le Chat,   │◄──────►│   (Cloudflare Edge)   │◄──────►│  (Agents +   │
+│   Claude)    │         │      Version 4.0      │         │  Web Search) │
 └──────────────┘         └───────────────────────┘         └──────┬───────┘
                                                                   │
                                                            ┌──────▼───────┐
@@ -100,7 +100,7 @@ The MCP server is deployed and ready to use:
 https://openglad-mcp.testworker12361.workers.dev/mcp
 ```
 
-#### Claude Desktop / Cursor / Windsurf
+#### Mistral Le Chat / Claude Desktop / Cursor / Windsurf
 
 Add to your MCP client configuration:
 
