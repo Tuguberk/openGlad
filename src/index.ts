@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Env, TARGET_SUBREDDITS } from "./config/constants";
 import { registerFrictionEngineTools } from "./tools/friction";
 import { registerDiagnosticTools } from "./tools/diagnostics";
+import { LANDING_HTML } from "./landing";
 
 const USAGE_GUIDE = `# openGlad Friction Engine — Agent Usage Guide
 
@@ -189,7 +190,10 @@ export default {
       // Some MCP clients (e.g. mcp.so) don't send the required Accept header.
       // Inject it so the Cloudflare Agents SDK doesn't reject the request.
       const accept = request.headers.get("accept") ?? "";
-      if (!accept.includes("text/event-stream") || !accept.includes("application/json")) {
+      if (
+        !accept.includes("text/event-stream") ||
+        !accept.includes("application/json")
+      ) {
         const headers = new Headers(request.headers);
         headers.set("accept", "application/json, text/event-stream");
         const patched = new Request(request, { headers });
@@ -199,6 +203,12 @@ export default {
     }
 
     if (url.pathname === "/") {
+      return new Response(LANDING_HTML, {
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      });
+    }
+
+    if (url.pathname === "/api") {
       return new Response(
         JSON.stringify({
           name: "openGlad Friction Engine",
