@@ -13,8 +13,7 @@
         "mcp",
         "mcp-server",
         "cloudflare-workers",
-        "ai",
-        "mistral"
+        "ai"
     ],
     "scripts": {
         "dev": "wrangler dev",
