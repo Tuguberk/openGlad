@@ -5,12 +5,11 @@ node_modules/
 .env
 .env.*
 .dev.vars
-mistral-api
-mistral-key
 
 # Build output
 dist/
 .wrangler/
+wrangler.jsonc
 
 # OS files
 .DS_Store

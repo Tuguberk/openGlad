@@ -107,7 +107,7 @@ openGlad is a **Model Context Protocol (MCP) server** that acts as the ultimate 
 The MCP server is deployed and ready to use:
 
 ```
-https://openglad-mcp.testworker12361.workers.dev/mcp
+https://openglad.tuguberk.dev/mcp
 ```
 
 #### Claude Desktop / Cursor / Windsurf / Any MCP Client
@@ -119,7 +119,7 @@ Add to your MCP client configuration:
   "mcpServers": {
     "openGlad": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://openglad-mcp.testworker12361.workers.dev/mcp"]
+      "args": ["-y", "mcp-remote", "https://openglad.tuguberk.dev/mcp"]
     }
   }
 }
@@ -129,7 +129,7 @@ Add to your MCP client configuration:
 
 ```bash
 npx @modelcontextprotocol/inspector@latest
-# Enter URL: https://openglad-mcp.testworker12361.workers.dev/mcp
+# Enter URL: https://openglad.tuguberk.dev/mcp
 ```
 
 ### Example Prompts
