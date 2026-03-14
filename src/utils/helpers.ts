@@ -8,10 +8,3 @@ export function buildAnalysisResponse(prompt: string, data: string, domain: stri
         ],
     };
 }
-
-export function errorResponse(message: string) {
-    return {
-        content: [{ type: "text" as const, text: `Error: ${message}` }],
-        isError: true,
-    };
-}

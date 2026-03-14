@@ -22,7 +22,7 @@ npm run dev
 
 ### 4. Implement your fix or feature
 
-At this point, you're ready to make your changes. Feel free to ask for help; everyone is a beginner at first. Any improvements to the prompt templates, Mistral AI integration, or new tools for the Friction Engine are very welcome.
+At this point, you're ready to make your changes. Feel free to ask for help; everyone is a beginner at first. Any improvements to the prompt templates, Reddit data integration, or new tools for the Friction Engine are very welcome.
 
 ### 5. Create a Pull Request
 
