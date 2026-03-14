@@ -23,7 +23,6 @@ export function registerFrictionEngineTools(server: McpServer, env: Env) {
         PROMPTS.run_the_bet,
         data,
         "friction pipeline",
-        server,
       );
     },
   );
@@ -39,12 +38,7 @@ export function registerFrictionEngineTools(server: McpServer, env: Env) {
         ),
     },
     async ({ input }) =>
-      buildAnalysisResponse(
-        PROMPTS.pattern_scan,
-        input,
-        "behavioral pattern",
-        server,
-      ),
+      buildAnalysisResponse(PROMPTS.pattern_scan, input, "behavioral pattern"),
   );
 
   server.tool(
@@ -62,7 +56,6 @@ export function registerFrictionEngineTools(server: McpServer, env: Env) {
         PROMPTS.loss_simulation,
         data,
         "loss simulation",
-        server,
       );
     },
   );
@@ -71,15 +64,12 @@ export function registerFrictionEngineTools(server: McpServer, env: Env) {
     "revenue_gate",
     `Locks the build phase and produces 2-3 specific monetization unlock tasks the user must complete before writing code. Use this when the user is eager to start building but hasn't validated willingness-to-pay. Does NOT search Reddit — purely behavioral.`,
     {
-      idea: z.string().describe("The idea or product the user wants to build."),
+      idea: z
+        .string()
+        .describe("The idea or product the user wants to build."),
     },
     async ({ idea }) =>
-      buildAnalysisResponse(
-        PROMPTS.revenue_gate,
-        idea,
-        "revenue gating",
-        server,
-      ),
+      buildAnalysisResponse(PROMPTS.revenue_gate, idea, "revenue gating"),
   );
 
   server.tool(
@@ -95,12 +85,7 @@ export function registerFrictionEngineTools(server: McpServer, env: Env) {
     async ({ idea_description }) => {
       const redditData = await fetchRedditContext(idea_description);
       const data = `IDEA:\n${idea_description}\n\nMARKET DATA FROM REDDIT:\n${redditData}`;
-      return buildAnalysisResponse(
-        PROMPTS.market_trends,
-        data,
-        "market trend",
-        server,
-      );
+      return buildAnalysisResponse(PROMPTS.market_trends, data, "market trend");
     },
   );
 
@@ -121,7 +106,6 @@ export function registerFrictionEngineTools(server: McpServer, env: Env) {
         PROMPTS.reddit_scan,
         data,
         "Reddit trend scan",
-        server,
       );
     },
   );

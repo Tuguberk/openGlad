@@ -43,7 +43,6 @@ export function registerDiagnosticTools(server: McpServer, env: Env) {
           PROMPTS.run_the_bet,
           data,
           "friction pipeline",
-          server,
         );
       }
 
@@ -63,7 +62,7 @@ export function registerDiagnosticTools(server: McpServer, env: Env) {
       }
 
       const p = getPromptForType(type);
-      return buildAnalysisResponse(p, input, "diagnostic data", server);
+      return buildAnalysisResponse(p, input, "diagnostic data");
     },
   );
 
@@ -82,7 +81,6 @@ export function registerDiagnosticTools(server: McpServer, env: Env) {
         PROMPTS.execution_stability,
         metrics_json,
         "execution stability",
-        server,
       ),
   );
 
@@ -101,7 +99,6 @@ export function registerDiagnosticTools(server: McpServer, env: Env) {
         PROMPTS.revenue_health,
         metrics_json,
         "revenue health",
-        server,
       ),
   );
 
@@ -116,12 +113,7 @@ export function registerDiagnosticTools(server: McpServer, env: Env) {
         ),
     },
     async ({ metrics_json }) =>
-      buildAnalysisResponse(
-        PROMPTS.burnout_risk,
-        metrics_json,
-        "burnout risk",
-        server,
-      ),
+      buildAnalysisResponse(PROMPTS.burnout_risk, metrics_json, "burnout risk"),
   );
 
   server.tool(
@@ -139,7 +131,6 @@ export function registerDiagnosticTools(server: McpServer, env: Env) {
         PROMPTS.distribution_discipline,
         metrics_json,
         "distribution discipline",
-        server,
       ),
   );
 
@@ -158,7 +149,6 @@ export function registerDiagnosticTools(server: McpServer, env: Env) {
         PROMPTS.full_diagnosis,
         telemetry_json,
         "startup telemetry",
-        server,
       ),
   );
 }

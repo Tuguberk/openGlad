@@ -210,7 +210,6 @@ openGlad/
 - **[Model Context Protocol](https://modelcontextprotocol.io/)** — Standard protocol for AI tool integration
 - **[Cloudflare Agents SDK](https://developers.cloudflare.com/agents/)** — MCP server framework
 - **[Reddit Public JSON API](https://www.reddit.com/dev/api/)** — Real-time market intelligence
-- **[MCP Sampling](https://modelcontextprotocol.io/docs/concepts/sampling)** — Server-initiated LLM calls via the client (auto-fallback for unsupported clients)
 
 ## License
 
