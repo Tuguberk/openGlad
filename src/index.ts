@@ -186,6 +186,15 @@ export default {
 
     if (url.pathname === "/mcp") {
       const server = createServer(env);
+      // Some MCP clients (e.g. mcp.so) don't send the required Accept header.
+      // Inject it so the Cloudflare Agents SDK doesn't reject the request.
+      const accept = request.headers.get("accept") ?? "";
+      if (!accept.includes("text/event-stream") || !accept.includes("application/json")) {
+        const headers = new Headers(request.headers);
+        headers.set("accept", "application/json, text/event-stream");
+        const patched = new Request(request, { headers });
+        return createMcpHandler(server)(patched, env, ctx);
+      }
       return createMcpHandler(server)(request, env, ctx);
     }
 
