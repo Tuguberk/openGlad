@@ -2,7 +2,7 @@
   <img src="github/opengladlogo.png" alt="openGlad Logo" width="250" />
   <p align="center"><strong>The Loss-Prevention Friction Engine for Founders</strong></p>
   <p align="center">
-    An AI-powered MCP server that stops you from building things nobody wants using clinical analytics, behavioral pattern scanning, and real-time Reddit market intelligence.
+    An AI-powered MCP server that stops you from building things nobody wants using clinical analytics, behavioral pattern scanning, and real-time market intelligence from Reddit, Hacker News, GitHub, and Polymarket.
   </p>
   <p align="center">
     <a href="#tools">Tools</a> •
@@ -23,7 +23,8 @@
 openGlad is a **Model Context Protocol (MCP) server** that acts as the ultimate friction engine for startups. It provides AI agents (Claude, Cursor, Windsurf, Le Chat, etc.) with specialized tools to enforce loss-prevention *before* you write a single line of code:
 
 - 🛑 **Loss-Prevention Pipeline** — Runs behavioral pattern scans, 3-scenario failure predictions, and locks building until monetization is confirmed.
-- 🔍 **Market Reality Check** — Fetches and analyzes real Reddit discussions across 11 entrepreneurship subreddits to detect overcrowding and entry risks.
+- 🔍 **Multi-Source Market Intelligence** — Aggregates real-time data from Reddit (11+ subreddits), Hacker News, GitHub, and Polymarket prediction markets to detect overcrowding and entry risks.
+- ⚔️ **Comparative Friction Analysis** — Runs parallel market intelligence on 2-3 ideas simultaneously and returns a ranked verdict on which one (if any) is worth pursuing.
 - 📊 **Startup Diagnostics** — Evaluates execution stability, revenue health, burnout risk, and distribution discipline.
 - 🩺 **Clinical Triage** — Objective, data-driven assessments with zero motivational fluff.
 
@@ -32,47 +33,57 @@ openGlad is a **Model Context Protocol (MCP) server** that acts as the ultimate 
 ## Architecture
 
 ```
-┌──────────────┐         ┌───────────────────────┐
-│   AI Client  │  MCP    │   openGlad Worker     │
-│  (Claude,    │◄──────►│   (Cloudflare Edge)   │
-│   Cursor,    │         │      Version 4.0      │
-│   Windsurf)  │         └───────────┬───────────┘
-└──────────────┘                     │ Direct fetch
-                                     │ (cached 1hr)
-                              ┌──────▼───────┐
-                              │    Reddit    │
-                              │ Public JSON  │
-                              │  11 Subs     │
-                              └──────────────┘
+┌──────────────┐         ┌───────────────────────────────┐
+│   AI Client  │  MCP    │   openGlad Worker             │
+│  (Claude,    │◄──────►│   (Cloudflare Edge)           │
+│   Cursor,    │         │      Version 5.0              │
+│   Windsurf)  │         └─────────────┬─────────────────┘
+└──────────────┘                       │ Parallel fetch (cached 1hr)
+                          ┌────────────┼────────────┐
+                   ┌──────▼──────┐ ┌──▼────┐ ┌─────▼──────┐ ┌──────▼──────┐
+                   │   Reddit    │ │  HN   │ │   GitHub   │ │ Polymarket  │
+                   │ 11+ subs    │ │Algolia│ │ Public API │ │  Gamma API  │
+                   │ + topic exp.│ │ free  │ │  no key    │ │   free      │
+                   └─────────────┘ └───────┘ └────────────┘ └─────────────┘
 ```
 
 **Tech Stack:**
 - **Runtime**: Cloudflare Workers (edge-deployed, globally distributed)
 - **Protocol**: MCP (Model Context Protocol) via Streamable HTTP
-- **Market Data**: Reddit Public JSON API (direct fetch, 1-hour edge cache)
+- **Market Data**: Reddit + Hacker News (Algolia) + GitHub + Polymarket (all free, no API keys)
 - **Language**: TypeScript (Modular Architecture)
 
 ## Tools
 
 ### 🚧 Friction Engine (Loss Prevention)
 
-| Tool | Description | Reddit Data |
+| Tool | Description | Market Data |
 |------|-------------|:-----------:|
-| `run_the_bet` | Mega-pipeline combining Pattern Scan, Loss Simulation, and Revenue Gate with Reddit market data. **Start here for new ideas.** | Yes |
-| `pattern_scan` | Detects behavioral risk patterns (overbuilding drift, monetization avoidance, prestige bias). | No |
-| `loss_simulation` | Generates 3-scenario failure predictions (best, likely, worst) with quantified expected loss. | Yes |
-| `revenue_gate` | Locks building until clear monetization strategy is confirmed. Produces unlock tasks. | No |
+| `run_the_bet` | Mega-pipeline combining Pattern Scan, Loss Simulation, and Revenue Gate. **Start here for new ideas.** | Reddit + HN + GitHub + Polymarket |
+| `pattern_scan` | Detects behavioral risk patterns (overbuilding drift, monetization avoidance, prestige bias). | None |
+| `loss_simulation` | Generates 3-scenario failure predictions (best, likely, worst) with quantified expected loss. | Reddit + HN + GitHub + Polymarket |
+| `revenue_gate` | Locks building until clear monetization strategy is confirmed. Produces unlock tasks. | None |
+| `compare_ideas` | Parallel multi-source analysis of 2-3 ideas with ranked comparison and single verdict. | Reddit + HN + GitHub + Polymarket |
 
-### 🔍 Market Intelligence (Reddit-powered)
+### 🔍 Market Intelligence (Multi-Source)
 
-| Tool | Description | Reddit Data |
+| Tool | Description | Market Data |
 |------|-------------|:-----------:|
-| `analyze_market_trends` | Overcrowding & entry risk filter. Detects tarpit ideas and late entry risks. | Yes |
-| `scan_reddit_trends` | Broad trend scanner: sentiment, red flags, cautionary tales, and 6-12 month predictions. | Yes |
+| `analyze_market_trends` | Overcrowding & entry risk filter. Detects tarpit ideas and late entry risks. | Reddit + HN + GitHub + Polymarket |
+| `scan_reddit_trends` | Broad trend scanner: sentiment, red flags, cautionary tales, and 6-12 month predictions. | Reddit + HN + GitHub + Polymarket |
 
-**Data Sources** — 11 subreddits searched:
+**Data Sources:**
 
-`r/Startup_Ideas` · `r/Business_Ideas` · `r/SaaS` · `r/SideProject` · `r/EntrepreneurRideAlong` · `r/IndieHackers` · `r/Futurology` · `r/Technology` · `r/AINewsAndTrends` · `r/Startups` · `r/Entrepreneur`
+| Source | API | What it adds |
+|--------|-----|-------------|
+| Reddit | Public JSON (free, no key) | Community sentiment, 11 base subreddits + dynamic topic expansion |
+| Hacker News | Algolia API (free, no key) | Technical founder signal — developer adoption, HN discussions |
+| GitHub | Public Search API (free, no key) | Competitor repo activity, star velocity, open source adoption |
+| Polymarket | Gamma API (free, no key) | Prediction market odds — real money bets on outcome probabilities |
+
+Reddit subreddits (base): `r/Startup_Ideas` · `r/Business_Ideas` · `r/SaaS` · `r/SideProject` · `r/EntrepreneurRideAlong` · `r/IndieHackers` · `r/Futurology` · `r/Technology` · `r/AINewsAndTrends` · `r/Startups` · `r/Entrepreneur`
+
+Dynamic expansion adds topic-specific subreddits (e.g. `r/MachineLearning` for AI queries, `r/CryptoCurrency` for crypto, `r/fintech` for finance).
 
 ### 🩺 Startup Diagnostics
 
@@ -141,7 +152,7 @@ Once connected, try these with your AI client:
 ```
 
 ```
-"Can you check if my idea for a daily planner app is going to fail?"
+"Compare these two ideas for me: (1) AI accounting SaaS for freelancers, (2) no-code internal tools builder"
 ```
 
 ```
@@ -149,7 +160,7 @@ Once connected, try these with your AI client:
 ```
 
 ```
-"Is the micro-SaaS market oversaturated? Check Reddit trends for me."
+"Is the micro-SaaS market oversaturated? Check trends across Reddit, HN, and GitHub."
 ```
 
 ## Deployment
@@ -174,20 +185,31 @@ npm run dev
 npx wrangler deploy
 ```
 
-No API keys required — openGlad fetches Reddit data directly via public JSON endpoints. Results are cached at the edge for 1 hour.
+No API keys required — openGlad fetches all market data via free public APIs. Results are cached at the edge for 1 hour per query.
 
 ### Project Structure
 
 ```
 openGlad/
 ├── src/
-│   ├── config/            # Environment & constants
-│   ├── prompts/           # LLM system prompts & templates
-│   ├── services/          # Reddit search & caching
-│   ├── tools/             # MCP Tool definitions & handlers
-│   ├── utils/             # Helper functions
-│   └── index.ts           # Server entry point, prompts, resources & tool registration
-├── wrangler.jsonc          # Cloudflare Worker configuration
+│   ├── config/
+│   │   └── constants.ts       # Subreddits + dynamic topic expansion map
+│   ├── prompts/
+│   │   └── index.ts           # LLM system prompts for all tools
+│   ├── services/
+│   │   ├── aggregator.ts      # Multi-source fetcher + evidence envelope wrapper
+│   │   ├── reddit.ts          # Reddit search + engagement ranking + dedup + retry
+│   │   ├── hackernews.ts      # HN Algolia API integration
+│   │   ├── polymarket.ts      # Polymarket Gamma API integration
+│   │   └── github.ts          # GitHub public search API integration
+│   ├── tools/
+│   │   ├── friction.ts        # Friction engine tools (run_the_bet, compare_ideas, etc.)
+│   │   └── diagnostics.ts     # Diagnostic tools (execution, revenue, burnout, distribution)
+│   ├── utils/
+│   │   ├── dedupe.ts          # Jaccard N-gram deduplication + per-author caps + engagement scoring
+│   │   └── helpers.ts         # Evidence envelope response builder
+│   └── index.ts               # Server entry point, prompts, resources & tool registration
+├── wrangler.jsonc              # Cloudflare Worker configuration
 ├── package.json
 └── tsconfig.json
 ```
@@ -198,18 +220,33 @@ openGlad/
 
 1. **User asks** → *"I want to build an AI resume builder"*
 2. **AI client** → Calls `run_the_bet` or `analyze_startup`
-3. **openGlad Worker** → Fetches relevant Reddit discussions across 11 subreddits (cached 1hr at edge)
-4. **Pattern Scan** → Identifies behavioral risks (overbuilding, monetization avoidance)
-5. **Loss Simulation** → Maps out 3 failure scenarios with quantified expected loss using Reddit market data
-6. **Revenue Gate** → Locks building until monetization is proven
-7. **User receives** → A brutal reality check: blind spots, failure modes, and whether they're allowed to build
+3. **openGlad Worker** → Fetches from 4 sources in parallel: Reddit (11+ subreddits), HackerNews, GitHub, Polymarket (all cached 1hr at edge)
+4. **Deduplication & Ranking** → Jaccard similarity removes cross-source duplicates; per-author cap (max 3) prevents single-voice dominance; engagement scoring weights freshness + score + activity
+5. **Pattern Scan** → Identifies behavioral risks (overbuilding, monetization avoidance)
+6. **Loss Simulation** → Maps out 3 failure scenarios with quantified expected loss grounded in real market signals
+7. **Revenue Gate** → Locks building until monetization is proven
+8. **User receives** → A brutal reality check: blind spots, failure modes, and whether they're allowed to build
+
+### compare_ideas Flow
+
+1. **User provides** → 2-3 startup idea descriptions
+2. **Parallel fetch** → Market context fetched for all ideas simultaneously
+3. **Comparative analysis** → Each idea gets a compressed friction block (pattern risk, market signal, expected loss, gate status)
+4. **Ranked verdict** → Single recommendation on which idea (if any) to pursue
 
 ## Built With
 
 - **[Cloudflare Workers](https://workers.cloudflare.com/)** — Serverless edge computing
 - **[Model Context Protocol](https://modelcontextprotocol.io/)** — Standard protocol for AI tool integration
 - **[Cloudflare Agents SDK](https://developers.cloudflare.com/agents/)** — MCP server framework
-- **[Reddit Public JSON API](https://www.reddit.com/dev/api/)** — Real-time market intelligence
+- **[Reddit Public JSON API](https://www.reddit.com/dev/api/)** — Community market intelligence
+- **[Hacker News Algolia API](https://hn.algolia.com/api)** — Developer community signals
+- **[GitHub REST API](https://docs.github.com/en/rest)** — Open source adoption & competitor activity
+- **[Polymarket Gamma API](https://docs.polymarket.com/)** — Prediction market odds
+
+## Inspiration
+
+Multi-source aggregation, Jaccard deduplication, engagement-based ranking, thin-source retry, and evidence envelope patterns are inspired by [mvanhorn/last30days-skill](https://github.com/mvanhorn/last30days-skill) (MIT).
 
 ## License
 

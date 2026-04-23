@@ -126,6 +126,27 @@ export const LANDING_HTML = `<!DOCTYPE html>
     .hero-endpoint .label { color: var(--text-dim); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; }
     .hero-endpoint code { color: var(--gold); }
 
+    /* ── SOURCES STRIP ── */
+    .sources-strip {
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.5rem; flex-wrap: wrap;
+    }
+    .sources-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-dim); margin-right: 0.5rem;
+    }
+    .source-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      padding: 0.35rem 0.85rem; border-radius: 999px;
+      font-size: 0.75rem; font-weight: 600; color: var(--text-dim);
+      transition: all 0.2s;
+    }
+    .source-pill:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .source-pill .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+
     /* ── SECTION BASE ── */
     section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
     .section-label {
@@ -230,14 +251,50 @@ export const LANDING_HTML = `<!DOCTYPE html>
       transition: border-color 0.2s;
     }
     .tool-card:hover { border-color: var(--gold-dim); }
+    .tool-card.new { border-color: var(--gold-dim); background: var(--border-gold); }
+    .tool-card.new:hover { border-color: var(--gold); }
     .tool-tag {
       font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
       color: var(--gold); background: var(--border-gold);
       padding: 0.25rem 0.6rem; border-radius: 6px;
       white-space: nowrap; align-self: flex-start; font-weight: 600;
     }
+    .tool-card.new .tool-tag {
+      background: var(--gold); color: #000;
+    }
     .tool-card .tool-info h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.2rem; }
     .tool-card .tool-info p { font-size: 0.8rem; color: var(--text-dim); }
+    .tool-new-badge {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gold);
+      background: var(--border-gold); border: 1px solid var(--gold-dim);
+      padding: 0.15rem 0.5rem; border-radius: 4px; align-self: flex-start;
+    }
+
+    /* ── DATA SOURCES ── */
+    .sources-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem; margin-top: 2rem;
+    }
+    .source-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem;
+      transition: all 0.2s;
+    }
+    .source-card:hover { border-color: var(--gold-dim); transform: translateY(-2px); }
+    .source-card .source-name {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+      font-weight: 700; color: var(--gold); margin-bottom: 0.4rem;
+    }
+    .source-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .source-card p { font-size: 0.8rem; color: var(--text-dim); line-height: 1.6; }
+    .source-card .free-badge {
+      display: inline-block; margin-top: 0.75rem;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--green);
+      background: rgba(46,204,113,0.08); border: 1px solid rgba(46,204,113,0.2);
+      padding: 0.2rem 0.5rem; border-radius: 4px;
+    }
 
     /* ── INSTALL ── */
     .install-section { text-align: center; }
@@ -293,7 +350,8 @@ export const LANDING_HTML = `<!DOCTYPE html>
       section { padding: 4rem 1.25rem; }
       .hero { padding: 5rem 1.25rem 3rem; }
       .hero-endpoint { flex-direction: column; gap: 0.25rem; }
-      .features-grid, .tools-grid { grid-template-columns: 1fr; }
+      .features-grid, .tools-grid, .sources-grid { grid-template-columns: 1fr; }
+      .sources-strip { gap: 0.4rem; }
     }
   </style>
 </head>
@@ -314,7 +372,7 @@ export const LANDING_HTML = `<!DOCTYPE html>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-badge">Loss-Prevention Engine</div>
+  <div class="hero-badge">Loss-Prevention Engine v5.0</div>
   <h1>
     Stop <span class="strike">Building</span><br>
     Start <span class="gold">Validating</span>
@@ -322,6 +380,7 @@ export const LANDING_HTML = `<!DOCTYPE html>
   <p class="hero-sub">
     An AI-powered MCP server that creates structured doubt.
     It doesn't help you build faster — it stops you from building things nobody wants.
+    Powered by Reddit, Hacker News, GitHub, and Polymarket.
   </p>
   <div class="hero-actions">
     <a href="#install" class="btn-primary">Connect to Claude</a>
@@ -332,6 +391,16 @@ export const LANDING_HTML = `<!DOCTYPE html>
     <code>https://openglad.tuguberk.dev/mcp</code>
   </div>
 </section>
+
+<!-- SOURCES STRIP -->
+<div class="sources-strip">
+  <span class="sources-label">Data Sources</span>
+  <span class="source-pill"><span class="dot"></span>Reddit</span>
+  <span class="source-pill"><span class="dot"></span>Hacker News</span>
+  <span class="source-pill"><span class="dot"></span>GitHub</span>
+  <span class="source-pill"><span class="dot"></span>Polymarket</span>
+  <span style="font-size:0.7rem;color:var(--text-dim);margin-left:0.5rem;">· All free · No API keys · Cached 1hr</span>
+</div>
 
 <!-- MIRROR STRIP -->
 <div class="mirror-strip">
@@ -347,7 +416,7 @@ export const LANDING_HTML = `<!DOCTYPE html>
 <!-- FEATURES -->
 <section id="features">
   <p class="section-label">What It Does</p>
-  <h2 class="section-title">Six layers of structured doubt</h2>
+  <h2 class="section-title">Seven layers of structured doubt</h2>
   <p class="section-desc">openGlad is not an acceleration engine. It's a friction engine. Every tool is designed to block premature building and force revenue validation first.</p>
   <div class="features-grid">
     <div class="feature-card">
@@ -367,8 +436,13 @@ export const LANDING_HTML = `<!DOCTYPE html>
     </div>
     <div class="feature-card">
       <div class="feature-icon">&#x1F4C8;</div>
-      <h3>Market Intelligence</h3>
-      <p>Real-time Reddit data from 11 subreddits. Overcrowding detection, tarpit alerts, and late-entry risk analysis.</p>
+      <h3>Multi-Source Market Intelligence</h3>
+      <p>Real-time data from Reddit (11+ subreddits), Hacker News, GitHub, and Polymarket prediction markets. Overcrowding detection, tarpit alerts, and late-entry risk analysis.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">&#x2694;&#xFE0F;</div>
+      <h3>Comparative Friction Analysis</h3>
+      <p>Can't decide between two ideas? Parallel multi-source analysis of 2-3 ideas simultaneously. One ranked verdict. No excuses.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon">&#x1FA7A;</div>
@@ -379,6 +453,39 @@ export const LANDING_HTML = `<!DOCTYPE html>
       <div class="feature-icon">&#x1FA9E;</div>
       <h3>Mirror Statements</h3>
       <p>Every analysis ends with confrontational closing sentences that reflect your behavioral flaws back at you. No sugar-coating.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DATA SOURCES -->
+<section id="sources">
+  <p class="section-label">Market Intelligence</p>
+  <h2 class="section-title">Four sources. No API keys. All free.</h2>
+  <p class="section-desc">Every market-facing tool aggregates data from all four sources in parallel, deduplicates cross-source results, and ranks by engagement — not just recency.</p>
+  <div class="sources-grid">
+    <div class="source-card">
+      <div class="source-name">Reddit</div>
+      <h4>Community Sentiment</h4>
+      <p>11 base subreddits + dynamic topic expansion. Engagement-ranked results with per-author caps to prevent single-voice dominance.</p>
+      <span class="free-badge">Free · No Key</span>
+    </div>
+    <div class="source-card">
+      <div class="source-name">Hacker News</div>
+      <h4>Developer Signal</h4>
+      <p>Algolia API searches the last 30 days of HN stories. Technical founder consensus — a completely different audience than Reddit.</p>
+      <span class="free-badge">Free · No Key</span>
+    </div>
+    <div class="source-card">
+      <div class="source-name">GitHub</div>
+      <h4>Open Source Adoption</h4>
+      <p>Public search API surfaces competing repos by star velocity and recent push activity. Shows whether developers are actually building in your space.</p>
+      <span class="free-badge">Free · No Key</span>
+    </div>
+    <div class="source-card">
+      <div class="source-name">Polymarket</div>
+      <h4>Prediction Markets</h4>
+      <p>Gamma API surfaces real-money prediction market odds. The most honest signal available — people betting their own money on outcomes.</p>
+      <span class="free-badge">Free · No Key</span>
     </div>
   </div>
 </section>
@@ -402,7 +509,7 @@ export const LANDING_HTML = `<!DOCTYPE html>
 <!-- HOW IT WORKS -->
 <section>
   <p class="section-label">How It Works</p>
-  <h2 class="section-title">Three steps to structured doubt</h2>
+  <h2 class="section-title">Four steps to structured doubt</h2>
   <p class="section-desc">Connect once, get friction forever.</p>
   <div class="steps">
     <div class="step">
@@ -411,7 +518,11 @@ export const LANDING_HTML = `<!DOCTYPE html>
     </div>
     <div class="step">
       <h3>Pitch your idea</h3>
-      <p>Tell the AI what you want to build. openGlad intercepts and runs the friction pipeline automatically.</p>
+      <p>Tell the AI what you want to build. openGlad intercepts and fetches data from Reddit, HN, GitHub, and Polymarket in parallel.</p>
+    </div>
+    <div class="step">
+      <h3>Face the data</h3>
+      <p>Cross-source duplicates are removed, results ranked by engagement, and evidence synthesized into a grounded market picture.</p>
     </div>
     <div class="step">
       <h3>Face the mirror</h3>
@@ -422,15 +533,23 @@ export const LANDING_HTML = `<!DOCTYPE html>
 
 <!-- TOOLS -->
 <section id="tools">
-  <p class="section-label">12 Tools</p>
+  <p class="section-label">13 Tools</p>
   <h2 class="section-title">The full arsenal</h2>
-  <p class="section-desc">Six friction tools and six diagnostic tools, all designed to prevent you from wasting your time.</p>
+  <p class="section-desc">Seven friction tools and six diagnostic tools, all designed to prevent you from wasting your time.</p>
   <div class="tools-grid">
     <div class="tool-card">
       <span class="tool-tag">run_the_bet</span>
       <div class="tool-info">
         <h4>Full Friction Pipeline</h4>
-        <p>Pattern Scan + Loss Simulation + Revenue Gate with Reddit market data.</p>
+        <p>Pattern Scan + Loss Simulation + Revenue Gate with multi-source market data.</p>
+      </div>
+    </div>
+    <div class="tool-card new">
+      <span class="tool-tag">compare_ideas</span>
+      <span class="tool-new-badge">New in v5</span>
+      <div class="tool-info">
+        <h4>Comparative Analysis</h4>
+        <p>Parallel friction analysis of 2-3 ideas. Ranked verdict on which one to pursue — if any.</p>
       </div>
     </div>
     <div class="tool-card">
@@ -444,7 +563,7 @@ export const LANDING_HTML = `<!DOCTYPE html>
       <span class="tool-tag">loss_simulation</span>
       <div class="tool-info">
         <h4>Failure Prediction</h4>
-        <p>3-scenario simulation with quantified expected loss.</p>
+        <p>3-scenario simulation with quantified expected loss, grounded in Reddit + HN + GitHub + Polymarket.</p>
       </div>
     </div>
     <div class="tool-card">
@@ -458,21 +577,21 @@ export const LANDING_HTML = `<!DOCTYPE html>
       <span class="tool-tag">analyze_market_trends</span>
       <div class="tool-info">
         <h4>Market Filter</h4>
-        <p>Overcrowding detection, tarpit alerts, late-entry risk.</p>
+        <p>Overcrowding detection, tarpit alerts, late-entry risk — across all four data sources.</p>
       </div>
     </div>
     <div class="tool-card">
       <span class="tool-tag">scan_reddit_trends</span>
       <div class="tool-info">
         <h4>Trend Scanner</h4>
-        <p>Broad trend analysis with sentiment and red flags.</p>
+        <p>Broad trend analysis with sentiment and red flags from Reddit, HN, GitHub, and Polymarket.</p>
       </div>
     </div>
     <div class="tool-card">
       <span class="tool-tag">analyze_startup</span>
       <div class="tool-info">
         <h4>Smart Triage</h4>
-        <p>Auto-routes to friction pipeline or diagnostics.</p>
+        <p>Auto-routes to friction pipeline or diagnostics based on input type.</p>
       </div>
     </div>
     <div class="tool-card">
@@ -563,7 +682,7 @@ export const LANDING_HTML = `<!DOCTYPE html>
 
 <!-- FOOTER -->
 <footer>
-  <p>openGlad v4.0.0 &mdash; The Loss-Prevention Friction Engine &mdash; Built by <a href="https://github.com/Tuguberk" target="_blank">Tuguberk</a> &mdash; Powered by <a href="https://modelcontextprotocol.io" target="_blank">MCP</a> + Cloudflare Workers</p>
+  <p>openGlad v5.0.0 &mdash; The Loss-Prevention Friction Engine &mdash; Built by <a href="https://github.com/Tuguberk" target="_blank">Tuguberk</a> &mdash; Powered by <a href="https://modelcontextprotocol.io" target="_blank">MCP</a> + Cloudflare Workers &mdash; Data: Reddit · HN · GitHub · Polymarket</p>
 </footer>
 
 <script>

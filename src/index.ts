@@ -60,13 +60,18 @@ Smart triage router. Pass the raw input and it auto-detects whether to run frict
 - ALWAYS present tool output EXACTLY as returned — do not summarize, rewrite, or soften the language
 - The engine is intentionally harsh — that's the point
 - Reddit data is cached for 1 hour to avoid rate limiting
-- Tools that search Reddit: run_the_bet, loss_simulation, analyze_market_trends, scan_reddit_trends
-- Tools that DON'T search Reddit: pattern_scan, revenue_gate, all analyze_* diagnostics`;
+- Data sources: Reddit (11+ subreddits, dynamically expanded by topic), HackerNews (Algolia), GitHub (public search), Polymarket (Gamma API)
+- Tools with multi-source data: run_the_bet, loss_simulation, analyze_market_trends, scan_reddit_trends, compare_ideas
+- Tools without external data: pattern_scan, revenue_gate, all analyze_* diagnostics
+- All market data is cached for 1 hour at the edge
+
+### User wants to COMPARE multiple ideas → use \`compare_ideas\`
+Parallel multi-source analysis of 2-3 ideas with ranked comparison and single verdict.`;
 
 function createServer(env: Env) {
   const server = new McpServer({
     name: "openGlad Friction Engine",
-    version: "4.0.0",
+    version: "5.0.0",
   });
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -212,17 +217,18 @@ export default {
       return new Response(
         JSON.stringify({
           name: "openGlad Friction Engine",
-          version: "4.0.0",
+          version: "5.0.0",
           mcp_endpoint: "/mcp",
           description:
             "Loss-prevention friction engine for founders. Stops you from building things nobody wants.",
           tools: [
-            "run_the_bet — Mega-pipeline: Pattern Scan + Loss Sim + Revenue Gate (Reddit)",
-            "pattern_scan — Behavioral risk detection",
-            "loss_simulation — 3-scenario failure prediction (Reddit)",
-            "revenue_gate — Locks building until monetization confirmed",
-            "analyze_market_trends — Overcrowding & entry risk filter (Reddit)",
-            "scan_reddit_trends — General warnings and trends (Reddit)",
+            "run_the_bet — Mega-pipeline: Pattern Scan + Loss Sim + Revenue Gate (Reddit + HN + GitHub + Polymarket)",
+            "pattern_scan — Behavioral risk detection (no external data)",
+            "loss_simulation — 3-scenario failure prediction (Reddit + HN + GitHub + Polymarket)",
+            "revenue_gate — Locks building until monetization confirmed (no external data)",
+            "analyze_market_trends — Overcrowding & entry risk filter (Reddit + HN + GitHub + Polymarket)",
+            "scan_reddit_trends — General warnings and trends (Reddit + HN + GitHub + Polymarket)",
+            "compare_ideas — Parallel 2-3 idea comparison with ranked verdict (Reddit + HN + GitHub + Polymarket)",
             "analyze_startup — Triage router (runs Friction Engine for ideas, Diagnostics for metrics)",
             "analyze_execution_stability — Engineering risk",
             "analyze_revenue_health — Financial risk",
@@ -237,8 +243,13 @@ export default {
             "analyze-startup",
           ],
           resources: ["openglad://guide — Agent usage guide"],
-          data_sources: TARGET_SUBREDDITS,
-          powered_by: "Reddit Public JSON API (Direct Web Search)",
+          data_sources: {
+            reddit: TARGET_SUBREDDITS,
+            hackernews: "Algolia API (free, no key required)",
+            github: "Public Search API (no key required)",
+            polymarket: "Gamma API (free, no key required)",
+          },
+          powered_by: "Reddit + HackerNews + GitHub + Polymarket (all free, no API keys required)",
         }),
         { headers: { "Content-Type": "application/json" } },
       );

@@ -1,8 +1,9 @@
-import { TARGET_SUBREDDITS } from "../config/constants";
+import { TARGET_SUBREDDITS, getTopicSubreddits } from "../config/constants";
+import { deduplicateByTitle, capByAuthor, engagementScore } from "../utils/dedupe";
 
-const CACHE_TTL = 3600; // 1 hour in seconds
+const CACHE_TTL = 3600;
 
-interface RedditPost {
+export interface RedditPost {
   title: string;
   selftext: string;
   score: number;
@@ -10,6 +11,7 @@ interface RedditPost {
   subreddit: string;
   permalink: string;
   created_utc: number;
+  author: string;
 }
 
 interface RedditSearchResult {
@@ -25,36 +27,70 @@ function cacheKey(query: string): string {
   return `https://openglad-cache.internal/reddit?q=${encodeURIComponent(normalized)}`;
 }
 
+async function fetchSubreddit(
+  subreddit: string,
+  query: string,
+  limit: number,
+): Promise<RedditPost[]> {
+  const sub = subreddit.replace("r/", "");
+  const encoded = encodeURIComponent(query);
+  const url = `https://www.reddit.com/r/${sub}/search.json?q=${encoded}&sort=relevance&limit=${limit}&restrict_sr=on&t=year`;
+
+  try {
+    const res = await fetch(url, {
+      headers: { "User-Agent": "openGlad/1.0 (MCP Friction Engine)" },
+    });
+    if (!res.ok) return [];
+    const json = (await res.json()) as RedditSearchResult;
+    return json.data.children.map((c) => c.data);
+  } catch {
+    return [];
+  }
+}
+
 export async function searchReddit(
   query: string,
   limit = 5,
 ): Promise<RedditPost[]> {
-  const posts: RedditPost[] = [];
-  const encoded = encodeURIComponent(query);
+  const subreddits = [
+    ...TARGET_SUBREDDITS,
+    ...getTopicSubreddits(query),
+  ];
 
-  const fetches = TARGET_SUBREDDITS.map(async (sub) => {
-    const subreddit = sub.replace("r/", "");
-    const url = `https://www.reddit.com/r/${subreddit}/search.json?q=${encoded}&sort=relevance&limit=${limit}&restrict_sr=on&t=year`;
-    try {
-      const res = await fetch(url, {
-        headers: { "User-Agent": "openGlad/1.0 (MCP Friction Engine)" },
-      });
-      if (!res.ok) return [];
-      const json = (await res.json()) as RedditSearchResult;
-      return json.data.children.map((c) => c.data);
-    } catch {
-      return [];
+  const fetches = subreddits.map(async (sub) => {
+    let posts = await fetchSubreddit(sub, query, limit);
+
+    // Thin-source retry: if fewer than 3 results, broaden to core subject only
+    if (posts.length < 3) {
+      const coreQuery = query.split(" ").slice(0, 3).join(" ");
+      if (coreQuery !== query) {
+        const retried = await fetchSubreddit(sub, coreQuery, limit);
+        posts = posts.length > 0 ? posts : retried;
+      }
     }
+    return posts;
   });
 
-  const results = await Promise.all(fetches);
-  for (const batch of results) {
-    posts.push(...batch);
-  }
+  const batches = await Promise.all(fetches);
+  const all: RedditPost[] = [];
+  for (const batch of batches) all.push(...batch);
 
-  // Sort by score descending, take top results
-  posts.sort((a, b) => b.score - a.score);
-  return posts.slice(0, limit * 3);
+  // Per-author cap: max 3 posts per author
+  const capped = capByAuthor(all, 3);
+
+  // Deduplication across subreddits
+  const deduped = deduplicateByTitle(capped, 0.7);
+
+  // Engagement-based ranking
+  const maxScore = Math.max(...deduped.map((p) => p.score), 1);
+  const maxComments = Math.max(...deduped.map((p) => p.num_comments), 1);
+  deduped.sort(
+    (a, b) =>
+      engagementScore(b.score, b.num_comments, b.created_utc, maxScore, maxComments) -
+      engagementScore(a.score, a.num_comments, a.created_utc, maxScore, maxComments),
+  );
+
+  return deduped.slice(0, limit * 3);
 }
 
 export function formatRedditResults(posts: RedditPost[]): string {
@@ -87,17 +123,14 @@ export async function fetchRedditContext(query: string): Promise<string> {
   const cache = caches.default;
   const key = cacheKey(query);
 
-  // Check cache first
   const cached = await cache.match(key);
   if (cached) {
     return cached.text();
   }
 
-  // Fetch fresh data
   const posts = await searchReddit(query);
   const result = formatRedditResults(posts);
 
-  // Store in cache with 1-hour TTL
   await cache.put(
     key,
     new Response(result, {
