@@ -27,14 +27,15 @@ function cacheKey(query: string): string {
   return `https://openglad-cache.internal/reddit?q=${encodeURIComponent(normalized)}`;
 }
 
-async function fetchSubreddit(
-  subreddit: string,
+async function fetchMultiSubreddit(
+  subreddits: string[],
   query: string,
   limit: number,
 ): Promise<RedditPost[]> {
-  const sub = subreddit.replace("r/", "");
+  const multi = subreddits.map((s) => s.replace("r/", "")).join("+");
   const encoded = encodeURIComponent(query);
-  const url = `https://www.reddit.com/r/${sub}/search.json?q=${encoded}&sort=relevance&limit=${limit}&restrict_sr=on&t=year`;
+  // Reddit multi-subreddit search: r/sub1+sub2+.../search.json — one request for all subs
+  const url = `https://www.reddit.com/r/${multi}/search.json?q=${encoded}&sort=relevance&limit=${limit}&restrict_sr=on&t=year`;
 
   try {
     const res = await fetch(url, {
@@ -57,26 +58,19 @@ export async function searchReddit(
     ...getTopicSubreddits(query),
   ];
 
-  const fetches = subreddits.map(async (sub) => {
-    let posts = await fetchSubreddit(sub, query, limit);
+  // Batch all subreddits into one request to avoid hitting CF's 50-subrequest cap
+  let posts = await fetchMultiSubreddit(subreddits, query, limit * 3);
 
-    // Thin-source retry: if fewer than 3 results, broaden to core subject only
-    if (posts.length < 3) {
-      const coreQuery = query.split(" ").slice(0, 3).join(" ");
-      if (coreQuery !== query) {
-        const retried = await fetchSubreddit(sub, coreQuery, limit);
-        posts = posts.length > 0 ? posts : retried;
-      }
+  // Thin-source retry: if too few results, retry with shortened core query (1 extra request)
+  if (posts.length < 3) {
+    const coreQuery = query.split(" ").slice(0, 3).join(" ");
+    if (coreQuery !== query) {
+      posts = await fetchMultiSubreddit(subreddits, coreQuery, limit * 3);
     }
-    return posts;
-  });
-
-  const batches = await Promise.all(fetches);
-  const all: RedditPost[] = [];
-  for (const batch of batches) all.push(...batch);
+  }
 
   // Per-author cap: max 3 posts per author
-  const capped = capByAuthor(all, 3);
+  const capped = capByAuthor(posts, 3);
 
   // Deduplication across subreddits
   const deduped = deduplicateByTitle(capped, 0.7);
