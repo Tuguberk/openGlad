@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/tuguberk-openglad-badge.png)](https://mseep.ai/app/tuguberk-openglad)
+
 <p align="center">
   <img src="github/opengladlogo.png" alt="openGlad Logo" width="250" />
   <p align="center"><strong>The Loss-Prevention Friction Engine for Founders</strong></p>
